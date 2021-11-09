@@ -3,12 +3,13 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import os
 from flask import Flask, request, jsonify, url_for
+import json
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User
+from models import db, Users, Planets, People, Favorites_planets, Favorites_people
 #from models import Person
 
 app = Flask(__name__)
@@ -30,14 +31,23 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
-@app.route('/user', methods=['GET'])
-def handle_hello():
+@app.route('/people', methods=['GET'])
+def people():
+    return jsonify(People)
 
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
+@app.route('/people/<int:people_id>', methods=['GET'])
+def peopleId(people_id):
+    peopleOne = People.query.get(people_id) 
+    return jsonify(peopleOne.serialize())
 
-    return jsonify(response_body), 200
+@app.route('/planets', methods=['GET'])
+def planets():
+    return jsonify(Planets)
+
+@app.route('/planets/<int:planet_id>', methods=['GET'])
+def planetsId(planet_id):
+    planetOne = People.query.get(planet_id) 
+    return jsonify(peopleOne.serialize())
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
