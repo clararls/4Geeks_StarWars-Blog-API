@@ -49,6 +49,15 @@ def planetsId(planet_id):
     planetOne = People.query.get(planet_id) 
     return jsonify(peopleOne.serialize())
 
+@app.route('/users', methods=['GET'])
+def users():
+    return jsonify(Users)
+
+@app.route('/users/favorites', methods=['GET'])
+def favorites():
+    return
+
+
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
