@@ -31,9 +31,23 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
+@app.route('/user', methods=['GET'])
+def handle_hello():
+
+    response_body = {
+        "msg": "Hello, this is your GET /user response "
+    }
+
+    return jsonify(response_body), 200
+@app.route('/users', methods=['GET'])
+def list_Users():
+    list_users = Users.query.all()
+    return jsonify([users.serialize() for users in list_users]), 200
+
 @app.route('/people', methods=['GET'])
-def people():
-    return jsonify(People)
+def list_people():
+    list_people = People.query.all()
+    return jsonify([people.serialize() for people in list_people]), 200
 
 @app.route('/people/<int:people_id>', methods=['GET'])
 def peopleId(people_id):
@@ -46,16 +60,15 @@ def planets():
 
 @app.route('/planets/<int:planet_id>', methods=['GET'])
 def planetsId(planet_id):
-    planetOne = People.query.get(planet_id) 
+    planetOne = People.query.get(planets_id) 
     return jsonify(peopleOne.serialize())
 
-@app.route('/users', methods=['GET'])
-def users():
-    return jsonify(Users)
-
 @app.route('/users/favorites', methods=['GET'])
-def favorites():
-    return
+def listUserFavorites(users_id):
+    peopleFavs = People_Fav.query.all()
+    planetFavs = Planet_Fav.query.all()
+    userFavs = [peopleFavs.query.filter_by(id=users_id) for fav in peopleFavs]
+    return jsonify(users.serialize()), 200
 
 
 # this only runs if `$ python src/main.py` is executed
